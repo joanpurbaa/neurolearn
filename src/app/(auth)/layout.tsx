@@ -18,7 +18,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 				height={300}
 				className="absolute z-0 right-0 bottom-0"
 				src="/authBackgroundTrophy.svg"
-				alt=""
+				alt="trophy"
+				priority={false}
 			/>
 		</main>
 	);
