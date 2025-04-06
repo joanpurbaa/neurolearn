@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function validationEmail() {
 	const validate = (values: { email: string }) => {
-		const errors: { email: string } = {};
+		const errors: Partial<{ email: string }> = {};
 
 		if (!values.email) {
 			errors.email = "Isi email kamu dulu dulu ya.";

@@ -5,7 +5,7 @@ import { Lock, User } from "lucide-react";
 
 export default function register() {
 	const validate = (values: { namaLengkap: string; password: string }) => {
-		const errors: { namaLengkap: string; password: string } = {};
+		const errors: Partial<{ namaLengkap: string; password: string }> = {};
 
 		if (!values.namaLengkap) {
 			errors.namaLengkap = "Yuk, isi nama lengkap kamu dulu.";
@@ -27,8 +27,8 @@ export default function register() {
 		onSubmit: (values) => {
 			const formData = new FormData();
 
-			formData.append("namaLengkap", values.namaLengkap);
-			formData.append("namaLengkap", values.password);
+			formData.append("nama ;engkap", values.namaLengkap);
+			formData.append("password", values.password);
 
 			fetch("/api/register", {
 				method: "POST",
