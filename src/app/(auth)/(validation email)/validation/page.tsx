@@ -2,6 +2,8 @@
 "use client";
 import { useFormik } from "formik";
 import Image from "next/image";
+import axios from "axios";
+import { redirect } from "next/navigation";
 
 export default function validationEmail() {
 	const validate = (values: { email: string }) => {
@@ -26,10 +28,11 @@ export default function validationEmail() {
 
 			formData.append("email", values.email);
 
-			fetch("/api/validation", {
-				method: "POST",
-				body: formData,
-			});
+			axios
+				.post("/api/validation", formData)
+				.then((result) =>
+					result.data?.validation ? redirect("/register") : redirect("/login")
+				);
 		},
 	});
 
