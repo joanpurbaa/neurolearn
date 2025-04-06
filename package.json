@@ -11,6 +11,8 @@
   "dependencies": {
     "@next/env": "^15.2.4",
     "@prisma/client": "^6.5.0",
+    "axios": "^1.8.4",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "formik": "^2.4.6",
