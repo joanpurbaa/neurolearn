@@ -1,13 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import { useFormik } from "formik";
 import { Lock, User } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import Cryptr from "cryptr";
+import axios from "axios";
 
 export default function register() {
 	const cryptr = new Cryptr(`${process.env.VALIDATION_SECRET_KEY}`);
 	const searchParams = useSearchParams();
+
+	!searchParams.get("em") && redirect("/validation");
 
 	const validate = (values: { namaLengkap: string; password: string }) => {
 		const errors: Partial<{ namaLengkap: string; password: string }> = {};
@@ -36,13 +40,15 @@ export default function register() {
 			formData.append("namaLengkap", values.namaLengkap);
 			formData.append("password", values.password);
 
-			fetch("/api/register", {
-				method: "POST",
-				body: formData,
-			});
+			axios
+				.post("/api/register", formData)
+				.then(
+					(result) =>
+						result.data?.status == 200 &&
+						redirect(`/login?em=${searchParams.get("em")}`)
+				);
 		},
 	});
-
 
 	return (
 		<section className="flex flex-col gap-y-7 bg-white rounded-xl p-5">

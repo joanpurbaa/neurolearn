@@ -1,15 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client";
-import { useEffect } from "react";
 import { Lock } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import Cryptr from "cryptr";
 
 export default function Login() {
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const cryptr = new Cryptr(`${process.env.VALIDATION_SECRET_KEY}`);
 	const searchParams = useSearchParams();
 
-	console.log(cryptr.decrypt(searchParams.get("em")));
+	!searchParams.get("em") && redirect("/validation");
 
 	return (
 		<section className="flex flex-col gap-y-7 bg-white rounded-xl p-5">
