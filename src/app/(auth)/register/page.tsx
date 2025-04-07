@@ -2,8 +2,13 @@
 "use client";
 import { useFormik } from "formik";
 import { Lock, User } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import Cryptr from "cryptr";
 
 export default function register() {
+	const cryptr = new Cryptr(`${process.env.VALIDATION_SECRET_KEY}`);
+	const searchParams = useSearchParams();
+
 	const validate = (values: { namaLengkap: string; password: string }) => {
 		const errors: Partial<{ namaLengkap: string; password: string }> = {};
 
@@ -27,7 +32,8 @@ export default function register() {
 		onSubmit: (values) => {
 			const formData = new FormData();
 
-			formData.append("nama ;engkap", values.namaLengkap);
+			formData.append("email", cryptr.decrypt(searchParams.get("em") as string));
+			formData.append("namaLengkap", values.namaLengkap);
 			formData.append("password", values.password);
 
 			fetch("/api/register", {
@@ -36,6 +42,7 @@ export default function register() {
 			});
 		},
 	});
+
 
 	return (
 		<section className="flex flex-col gap-y-7 bg-white rounded-xl p-5">

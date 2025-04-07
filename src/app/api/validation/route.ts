@@ -14,8 +14,8 @@ export async function POST(request: NextRequest) {
 
 		if (checkTheEmail) return NextResponse.json({ validation: true });
 
-		return NextResponse.json({ validation: false });
+		return NextResponse.json({ status: 200, validation: false });
 	} catch {
-		return NextResponse.json({ status: false });
+		return NextResponse.json({ status: 404 });
 	}
 }

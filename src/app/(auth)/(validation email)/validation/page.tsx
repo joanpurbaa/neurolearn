@@ -4,8 +4,11 @@ import { useFormik } from "formik";
 import Image from "next/image";
 import axios from "axios";
 import { redirect } from "next/navigation";
+import Cryptr from "cryptr";
 
 export default function validationEmail() {
+	const cryptr = new Cryptr(`${process.env.VALIDATION_SECRET_KEY}`);
+
 	const validate = (values: { email: string }) => {
 		const errors: Partial<{ email: string }> = {};
 
@@ -31,7 +34,9 @@ export default function validationEmail() {
 			axios
 				.post("/api/validation", formData)
 				.then((result) =>
-					result.data?.validation ? redirect("/register") : redirect("/login")
+					result.data?.validation
+						? redirect(`/login?em=${cryptr.encrypt(values.email)}`)
+						: redirect(`/register?em=${cryptr.encrypt(values.email)}`)
 				);
 		},
 	});
