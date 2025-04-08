@@ -5,13 +5,14 @@ import { redirect, useSearchParams } from "next/navigation";
 import Cryptr from "cryptr";
 import { useFormik } from "formik";
 import { handleSignIn } from "@/lib/actions";
-import { useState } from "react";
 import Loading from "@/_components/Loading";
+import { useState } from "react";
 
 export default function Login() {
 	const cryptr = new Cryptr(`${process.env.VALIDATION_SECRET_KEY}`);
 	const searchParams = useSearchParams();
 	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string>();
 
 	!searchParams.get("em") && redirect("/validation");
 
@@ -36,6 +37,9 @@ export default function Login() {
 			handleSignIn({
 				email: cryptr.decrypt(searchParams.get("em") as string),
 				password: values.password,
+			}).then((result) => {
+				setLoading(false);
+				setError(result?.message);
 			});
 		},
 	});
@@ -63,8 +67,8 @@ export default function Login() {
 									value={formik.values.password}
 								/>
 							</div>
-							{formik.errors.password ? (
-								<p className="mt-2 text-red-500">{formik.errors.password}</p>
+							{formik.errors.password || error ? (
+								<p className="mt-2 text-red-500">{formik.errors.password || error}</p>
 							) : null}
 						</li>
 						<li>

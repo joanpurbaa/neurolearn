@@ -22,10 +22,6 @@ export async function handleSignIn({
 					return {
 						message: "Password salah!",
 					};
-				default:
-					return {
-						message: "Terdapat kesalahan.",
-					};
 			}
 		}
 		throw error;
