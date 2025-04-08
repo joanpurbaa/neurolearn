@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import { useFormik } from "formik";
-import { Lock, User } from "lucide-react";
+import { Eye, EyeClosed, Lock, User } from "lucide-react";
 import { redirect, useSearchParams } from "next/navigation";
 import Cryptr from "cryptr";
 import axios from "axios";
@@ -13,6 +13,7 @@ export default function register() {
 	const cryptr = new Cryptr(`${process.env.VALIDATION_SECRET_KEY}`);
 	const searchParams = useSearchParams();
 	const [loading, setLoading] = useState(false);
+	const [passwordTextType, setPasswordTextType] = useState(false);
 
 	!searchParams.get("em") && redirect("/validation");
 
@@ -86,22 +87,33 @@ export default function register() {
 							<div className="flex items-center border gap-x-3 border-[#C6C6C6] p-3 rounded-md">
 								<Lock className="text-[#a5a5a5]" />
 								<input
-									className="w-full outline-none "
-									type="password"
+									className="w-full outline-none"
+									type={passwordTextType ? "text" : "password"}
 									placeholder="Masukkan password"
 									name="password"
 									onChange={formik.handleChange}
 									value={formik.values.password}
 								/>
+								{passwordTextType ? (
+									<Eye
+										onClick={() => setPasswordTextType(false)}
+										className="text-[#a5a5a5] cursor-pointer"
+									/>
+								) : (
+									<EyeClosed
+										onClick={() => setPasswordTextType(true)}
+										className="text-[#a5a5a5] cursor-pointer"
+									/>
+								)}
 							</div>
-							{formik.errors.password ? (
+							{formik.errors.password && (
 								<p className="mt-2 text-red-500">{formik.errors.password}</p>
-							) : null}
+							)}
 						</li>
 						<li>
 							<button
 								type="submit"
-								className="w-full bg-primary text-white font-semibold rounded-full py-3">
+								className="w-full bg-primary text-white font-semibold rounded-full py-3 cursor-pointer">
 								Lanjut
 							</button>
 						</li>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client";
-import { Lock } from "lucide-react";
+import { Eye, EyeClosed, Lock } from "lucide-react";
 import { redirect, useSearchParams } from "next/navigation";
 import Cryptr from "cryptr";
 import { useFormik } from "formik";
@@ -13,6 +13,7 @@ export default function Login() {
 	const searchParams = useSearchParams();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string>();
+	const [passwordTextType, setPasswordTextType] = useState(false);
 
 	!searchParams.get("em") && redirect("/validation");
 
@@ -56,25 +57,38 @@ export default function Login() {
 				<form action="" onSubmit={formik.handleSubmit}>
 					<ul className="space-y-5">
 						<li>
-							<div className="flex items-center border gap-x-3 border-[#C6C6C6] p-3 rounded-md">
-								<Lock className="text-[#a5a5a5]" />
-								<input
-									className="w-full outline-none"
-									type="text"
-									placeholder="Masukkan password"
-									name="password"
-									onChange={formik.handleChange}
-									value={formik.values.password}
-								/>
-							</div>
-							{formik.errors.password || error ? (
-								<p className="mt-2 text-red-500">{formik.errors.password || error}</p>
-							) : null}
+							<li>
+								<div className="flex items-center border gap-x-3 border-[#C6C6C6] p-3 rounded-md">
+									<Lock className="text-[#a5a5a5]" />
+									<input
+										className="w-full outline-none"
+										type={passwordTextType ? "text" : "password"}
+										placeholder="Masukkan password"
+										name="password"
+										onChange={formik.handleChange}
+										value={formik.values.password}
+									/>
+									{passwordTextType ? (
+										<Eye
+											onClick={() => setPasswordTextType(false)}
+											className="text-[#a5a5a5] cursor-pointer"
+										/>
+									) : (
+										<EyeClosed
+											onClick={() => setPasswordTextType(true)}
+											className="text-[#a5a5a5] cursor-pointer"
+										/>
+									)}
+								</div>
+								{(formik.errors.password || error) && (
+									<p className="mt-2 text-red-500">{formik.errors.password || error}</p>
+								)}
+							</li>
 						</li>
 						<li>
 							<button
 								type="submit"
-								className="w-full bg-primary text-white font-semibold rounded-full py-3">
+								className="w-full bg-primary text-white font-semibold rounded-full py-3 cursor-pointer">
 								Lanjut
 							</button>
 						</li>
