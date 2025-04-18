@@ -41,8 +41,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		}),
 	],
 	callbacks: {
-		authorized({ auth }) {
-			return !!auth;
+		authorized({ request: { nextUrl }, auth }) {
+			const isLoggedIn = !!auth?.user;
+			const { pathname } = nextUrl;
+
+			if (pathname.startsWith("/validation") && isLoggedIn) {
+				return Response.redirect(new URL("/", nextUrl));
+			}
+
+			if (!isLoggedIn && !pathname.startsWith("/validation")) {
+				return Response.redirect(new URL("/validation", nextUrl));
+			}
+
+			return true;
 		},
 	},
 });
